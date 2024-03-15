@@ -8,11 +8,14 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Project from "./pages/Project";
 
+// import all the components we need
+import Headers from "./components/Header";
 // adding the routes using react-router-dom
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter>
+      <Headers />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
