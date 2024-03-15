@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "server": "nodemon ./api/src/index.js",
     "client": "cd ./client && npm run dev",
