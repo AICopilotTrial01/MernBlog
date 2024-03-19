@@ -28,7 +28,7 @@ export const signUp = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.status(201).json({ message: "User created" });
+    res.status(201).json({ message: "User created", success: true });
   } catch (err) {
     next(err);
   }
@@ -53,10 +53,12 @@ export const signIn = async (req, res, next) => {
       password,
       validUser.password
     );
+    // if the password are not the same after comparing than return an error message
     if (!validPassword) {
       return next(errorHandler(400, "Invalid password"));
     }
 
+    // create the user token, that we can used in our frontend to check if the user is logged in.
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
     // remove the password from the user object
@@ -66,7 +68,7 @@ export const signIn = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
       })
-      .json(rest);
+      .json({ rest, success: true });
   } catch (err) {
     next(err);
   }

@@ -1,5 +1,5 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Button, Label, Spinner, TextInput, Alert } from "flowbite-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -7,22 +7,25 @@ function SignUp() {
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // if the user didn't fill the form then we will show an alert
-    switch (formData) {
-      case formData.username === "":
-        alert("Please fill the username field");
-        return;
-      case formData.email === "":
-        alert("Please fill the email field");
-        return;
-      case formData.password === "":
-        alert("Please fill the password field");
-        return;
+    if (
+      formData.username === "" ||
+      formData.email === "" ||
+      formData.password === "" ||
+      !formData.username ||
+      !formData.email ||
+      !formData.password
+    ) {
+      return setErrorMessage("Please fill in all the fields correctly");
     }
     try {
+      setLoading(true);
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: {
@@ -31,19 +34,26 @@ function SignUp() {
         body: JSON.stringify(formData), // we need to convert the json data to string that browser can understand
       });
       const data = await response.json();
-      console.log(data);
+      if (!data.success) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (response.ok) {
+        navigate("/sign-in");
+      }
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
     console.log(formData);
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
     console.log(formData);
   };
   return (
-    <div className="min-h-screen mt-20">
+    <div className="min-h-[80vh] flex justify-center items-center">
       <div className="flex p-3 max-w-6xl mx-auto flex-col md:flex-row gap-10 md:items-center">
         <div className="flex-1" id="left-side">
           <h1 className=" self-center whitespace-nowrap text-3xl md:text-4xl font-bold dark:text-white">
@@ -96,7 +106,14 @@ function SignUp() {
               className="w-full"
               type="submit"
             >
-              Sign-in
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading ....</span>
+                </>
+              ) : (
+                "Sign-up"
+              )}
             </Button>
           </form>
 
@@ -106,6 +123,12 @@ function SignUp() {
               Sign In
             </Link>
           </div>
+
+          {errorMessage && (
+            <Alert className="mt-5" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
