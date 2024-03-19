@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "server": "nodemon ./api/src/index.js",
-    "client": "cd ./client && npx vite --host 192.168.55.113  ",
+    "client": "cd ./client && npm run dev  ",
+    "tailwind:css": "cd ./client && npm run tailwind:css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

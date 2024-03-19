@@ -12,6 +12,7 @@ import Project from "./pages/Project";
 import Headers from "./components/Header";
 // adding the routes using react-router-dom
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import FooterCom from "./components/FooterCom";
 function App() {
   return (
     <BrowserRouter>
@@ -20,10 +21,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/project" element={<Project />} />
       </Routes>
+      <FooterCom />
     </BrowserRouter>
   );
 }

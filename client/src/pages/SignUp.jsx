@@ -10,21 +10,25 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      formData.username === "" ||
-      formData.email === "" ||
-      formData.password === ""
-    ) {
-      alert("Please fill all the fields");
-      return;
+    // if the user didn't fill the form then we will show an alert
+    switch (formData) {
+      case formData.username === "":
+        alert("Please fill the username field");
+        return;
+      case formData.email === "":
+        alert("Please fill the email field");
+        return;
+      case formData.password === "":
+        alert("Please fill the password field");
+        return;
     }
     try {
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // application/json mean we are sending json data
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // we need to convert the json data to string that browser can understand
       });
       const data = await response.json();
       console.log(data);
